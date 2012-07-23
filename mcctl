@@ -1,0 +1,175 @@
+#!/bin/bash
+
+# mcctl - a tool for managing your minecraft server through screen
+# written by austin and gwen adams
+#
+# requires sudo (if it's being run by another user), screen, and bash 4.0+
+# this was written and tested on linux, so don't be suprised it breaks on other platforms
+#  (pull requests making it more universal are welcome at github.com/uncleninja/mcctl)
+
+cfgloc=/etc/mcctl/mcctl.conf
+cfgkeys=(mcuser allowusers allowgroup mcsession mchome invocation)
+requiredcfg=(mcuser mcsession mchome invocation)
+# different exit levels
+esyntax=1
+ecfg=2
+emisc=3
+# different handy characters
+newline='
+'
+# negative acknowledge character (aka control-u which clears text input)
+nak=$(echo -en "\x15")
+# effective uid of user
+uid=$(id -u)
+
+# default configuration
+usage () {
+    cat << EOF
+mcctl - a tool for managing your minecraft server through screen
+usage:
+    mcctl help
+    mcctl pid
+    mcctl cmd {command} 
+    mcctl console 
+    mcctl save
+    mcctl stop
+    mcctl start
+    mcctl restart
+    mcctl rawrestart
+    mcctl rawstop
+    mcctl forcestop 
+    mcctl flushusers
+EOF
+    exit 0
+}
+
+die () {
+    echo $1 1>&2
+    exit $2
+}
+
+servercmd () {
+    asuser screen -S $mcsession -p 0 -X stuff "$nak$*$newline"
+}
+
+# selects the newest process with a full name that matches the invocation
+getpid () {
+    pgrep -fxn "$invocation" 2> /dev/null
+}
+
+validatecfg () {
+    for key in ${requiredcfg[@]}; do
+        if [ -z "$(eval echo -n \$$key)" ]; then
+            die "configuration is missing $key" $ecfg
+        fi
+    done
+
+    mcuid=$(id -u $mcuser)
+    if [ $? -ne "0" ]; then
+        die "mcuser does not exist!" $ecfg
+    fi
+}
+
+loadcfg () {
+    [ -f $cfgloc ] || die "$cfgloc does not exist!" $ecfg
+    . $cfgloc || die "something went wrong loading the config!" $ecfg
+    validatecfg
+}
+
+# executes command as $mcuser
+asuser () {
+    if [ $uid -eq $mcuid ]; then
+        "$@"
+    else
+        sudo -u $mcuser "$@"
+    fi
+}
+
+# subcommands
+cmd () {
+    [ $# -lt 1 ] && die "please specify a command to run" $esyntax
+    servercmd $@
+}
+console () {
+    screen -r $mcuser/$mcsession
+}
+save () {
+    servercmd save-all
+}
+stop () {
+    save
+    sleep 2
+    rawstop
+}
+start () {
+    pushd $mchome > /dev/null
+    asuser screen -dmS $mcsession $invocation
+    popd > /dev/null
+    flushusers
+}
+restart () {
+    stop
+    sleep 3 
+    start
+}
+rawrestart () {
+    rawstop
+    sleep 3
+    start
+}
+rawstop () {
+    servercmd stop
+}
+forcestop () {
+    pid=$(getpid)
+
+    if [ ! -z "$pid" ]; then
+        echo "sending sigint..."
+        kill -INT "$pid"
+        
+        sleep 2
+        pid=$(getpid)
+
+        if [ ! -z "$pid" ]; then
+            echo "still alive, sending sigkill"
+            kill -KILL "$pid"
+        fi
+    fi
+}
+flushusers () {
+    allusers=$allowusers
+
+    groupusers=$(getent group minecraft | cut -f 4 -d :)
+    # epic oneliner
+    [ ! -z $groupusers ] && [ ! -z $allusers ] && allusers=$allusers,$groupusers || allusers=$allusers$groupusers
+
+    if [ ! -z "$allusers" ]; then
+        # allow other users to access the session
+        asuser screen -S $mcsession -X multiuser on
+        asuser $mcuser screen -S $mcsession -X addacl $allusers
+    fi
+}
+pid () {
+   echo $(getpid) 
+}
+
+# logic
+[ $# -gt 0 ] || die "too few args. try 'mcctl help'" $esyntax
+#[ $# -le 2 ] || die "too many args. try 'mcctl help'" $esyntax
+
+[[ "$1" =~ ^(--help|-h|help)$ ]] && usage
+
+# attempt to load configuration
+loadcfg
+
+args="${@:2}"
+subcommands="cmd console save stop start restart rawrestart rawstop forcestop flushusers pid"
+
+for i in $subcommands; do
+    if [ "$1" = "$i" ]; then
+        $i $args
+        exit 0
+    fi
+done
+
+die "unknown command: $1. try 'mcctl help'" $esyntax
