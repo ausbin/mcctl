@@ -81,7 +81,7 @@ asuser () {
     if [ $uid -eq $mcuid ]; then
         "$@"
     else
-        sudo -u $mcuser "$@"
+        sudo -u $mcuser $@
     fi
 }
 
@@ -146,7 +146,7 @@ flushusers () {
     if [ ! -z "$allusers" ]; then
         # allow other users to access the session
         asuser screen -S $mcsession -X multiuser on
-        asuser $mcuser screen -S $mcsession -X addacl $allusers
+        asuser screen -S $mcsession -X addacl $allusers
     fi
 }
 pid () {
