@@ -81,7 +81,7 @@ asuser () {
     if [ $uid -eq $mcuid ]; then
         "$@"
     else
-        sudo -u $mcuser $@
+        sudo -u $mcuser "$@"
     fi
 }
 
