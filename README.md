@@ -1,7 +1,7 @@
 mcctl
 =====
 
-mcctl is a bash script that greatly simplifies administering a minecraft server. It's like apachectl except minecraft.
+mcctl is a bash script that greatly simplifies administering a minecraft server. It's like apachectl except for minecraft.
 
 dependencies
 ------------
@@ -20,11 +20,6 @@ Installation is pretty straightforward:
     # install -Dm 755 mcctl /usr/bin/mcctl
     # install -Dm 755 mcctl.conf /etc/mcctl/mcctl.conf
 
-configuration
--------------
-
-The configuration file is located at `/etc/mcctl/mcctl.conf`. 
-
 usage
 -----
 
@@ -38,4 +33,4 @@ usage
 * Force the server to stop (sigint/sigkill): `mcctl forcestop`
 * Run a command on the server: `mcctl cmd say bacon`
 * Get the process id of the server (no output if not running): `mcctl pid`
-* Allow the users from $allowusers and $allowgroup to access the console's screen session: `mcctl flushusers`
+* Allow the users from `$allowusers` and `$allowgroup` to access the console's screen session: `mcctl flushusers`

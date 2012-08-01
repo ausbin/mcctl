@@ -22,7 +22,6 @@ nak=$(echo -en "\x15")
 # effective uid of user
 uid=$(id -u)
 
-# default configuration
 usage () {
     cat << EOF
 mcctl - a tool for managing your minecraft server through screen
@@ -49,7 +48,9 @@ die () {
 }
 
 servercmd () {
-    asuser screen -S $mcsession -p 0 -X stuff "$nak$*$newline"
+    # if the nice prompt is in use (bukkit) then input a ^U to clear the prompt.
+    [ $niceprompt = 1 ] && firstchar="$nak" || firstchar=
+    asuser screen -S $mcsession -p 0 -X stuff "$firstchar$*$newline"
 }
 
 # selects the newest process with a full name that matches the invocation
@@ -74,6 +75,10 @@ loadcfg () {
     [ -f $cfgloc ] || die "$cfgloc does not exist!" $ecfg
     . $cfgloc || die "something went wrong loading the config!" $ecfg
     validatecfg
+
+    # XXX validate contents of $niceprompt in validatecfg
+    # default to false if $niceprompt has a strange value
+    [ "$niceprompt" = "1" ] || niceprompt=0
 }
 
 # executes command as $mcuser
