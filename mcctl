@@ -1,11 +1,30 @@
 #!/bin/bash
 
 # mcctl - a tool for managing your minecraft server through screen
-# written by austin and gwen adams
+# Copyright (C) 2012 Austin and Gwen Adams 
 #
-# requires sudo (if it's being run by another user), screen, and bash 4.0+
-# this was written and tested on linux, so don't be suprised it breaks on other platforms
-#  (pull requests making it more universal are welcome at github.com/uncleninja/mcctl)
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+# notes:
+# - requires sudo (if it's being run by another user), screen, and bash 4.0+
+# - this was written and tested on linux, so don't be suprised it breaks on other platforms
+#   (pull requests making it more universal are welcome at github.com/uncleninja/mcctl)
+# - exit statuses:
+#   - 1 => command line syntax error
+#   - 2 => config error
+#   - 3 => misc
 
 cfgloc=/etc/mcctl/mcctl.conf
 cfgkeys=(mcuser allowusers allowgroup mcsession mchome invocation)

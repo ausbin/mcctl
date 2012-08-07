@@ -1,7 +1,9 @@
 mcctl
 =====
 
-mcctl is a bash script that greatly simplifies administering a minecraft server. It's like apachectl except for minecraft.
+mcctl is a bash script that greatly simplifies administering a minecraft server. It's like apachectl except for minecraft. 
+
+Licensed under the GPL2.
 
 dependencies
 ------------
@@ -19,6 +21,8 @@ Installation is pretty straightforward:
     $ cd mcctl
     # install -Dm 755 mcctl /usr/bin/mcctl
     # install -Dm 755 mcctl.conf /etc/mcctl/mcctl.conf
+
+If you're an Arch user, download the [PKGBUILD](https://raw.github.com/UncleNinja/mcctl/master/PKGBUILD) and run `makepkg`.
 
 usage
 -----
