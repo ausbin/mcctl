@@ -36,6 +36,8 @@ emisc=3
 # different handy characters
 newline='
 '
+# enquiry character (control-e, which moves the cursor to the end of the line in readline)
+enq=$(echo -en "\x05")
 # negative acknowledge character (aka control-u which clears text input)
 nak=$(echo -en "\x15")
 # effective uid of user
@@ -67,8 +69,8 @@ die () {
 }
 
 servercmd () {
-    # if the nice prompt is in use (bukkit) then input a ^U to clear the prompt.
-    [ $niceprompt = 1 ] && firstchar="$nak" || firstchar=
+    # if the nice prompt is in use (usually bukkit) then input ^E^U to clear the prompt.
+    [ $niceprompt = 1 ] && firstchar="$enq$nak" || firstchar=
     asuser screen -S $mcsession -p 0 -X stuff "$firstchar$*$newline"
 }
 
