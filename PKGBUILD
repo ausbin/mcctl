@@ -1,7 +1,7 @@
 # Maintainer: Austin Adams <screamingmoron at gmail dot com>
 pkgname=mcctl-git
 pkgver=durr
-pkgrel=1
+pkgrel=2
 pkgdesc="simplifies minecraft server administration"
 arch=("any")
 url="https://github.com/uncleninja/mcctl"
@@ -9,6 +9,7 @@ license=('GPL')
 depends=("bash" "screen")
 makedepends=('git')
 optdepends=("sudo: for performing actions as another user")
+backup=("etc/mcctl/mcctl.conf")
 
 _gitroot=git://github.com/UncleNinja/mcctl.git
 _gitname=mcctl
