@@ -24,6 +24,15 @@ Installation is pretty straightforward:
 
 If you're an Arch user, download the [PKGBUILD](https://raw.github.com/UncleNinja/mcctl/master/PKGBUILD) and run `makepkg`.
 
+config
+------
+
+The configuration file (`/etc/mcctl/mcctl.conf`) is heavily commented and full of examples, but there are still a few things worth noting:
+
+1. **If you're using craftbukkit**, set `$niceprompt` to 1. Craftbukkit has a nice readline-style prompt that, among other features, allows the prompt to be cleared before commands are sent.
+2. Keep in mind that if you modify `$mcuser` or `$mcsession` while the server is running, screen may be unable to find the session.
+3. Similarly, changing `$invocation` while the server is running will result in mcctl being unable to find the server process.
+
 usage
 -----
 
