@@ -17,12 +17,12 @@ installation
 
 Installation is pretty straightforward:
 
-    $ git clone git://github.com/UncleNinja/mcctl.git mcctl
+    $ git clone git://github.com/ausbin/mcctl.git mcctl
     $ cd mcctl
     # install -Dm 755 mcctl /usr/bin/mcctl
     # install -Dm 755 mcctl.conf /etc/mcctl/mcctl.conf
 
-If you're an Arch user, download the [PKGBUILD](https://raw.github.com/UncleNinja/mcctl/master/PKGBUILD) and run `makepkg`.
+If you're an Arch user, download the [PKGBUILD](https://raw.github.com/ausbin/mcctl/master/PKGBUILD) and run `makepkg`.
 
 config
 ------
