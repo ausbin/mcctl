@@ -151,14 +151,14 @@ forcestop () {
 
     if [ ! -z "$pid" ]; then
         echo "sending sigint..."
-        kill -INT "$pid"
+        asuser kill -INT "$pid"
         
         sleep 2
         pid=$(getpid)
 
         if [ ! -z "$pid" ]; then
             echo "still alive, sending sigkill"
-            kill -KILL "$pid"
+            asuser kill -KILL "$pid"
         fi
     fi
 }
