@@ -1,4 +1,6 @@
 # Maintainer: Austin Adams <screamingmoron at gmail dot com>
+# Don't use this inside a cloned copy of the git repository. Put it in
+# a fresh directory and build there instead.
 pkgname=mcctl-git
 pkgver=durr
 pkgrel=2
