@@ -13,7 +13,7 @@ makedepends=('git')
 optdepends=("sudo: for performing actions as another user")
 backup=("etc/mcctl/mcctl.conf")
 
-_gitroot=git://github.com/UncleNinja/mcctl.git
+_gitroot=git://github.com/ausbin/mcctl.git
 _gitname=mcctl
 
 build() {
