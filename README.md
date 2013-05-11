@@ -1,6 +1,8 @@
 mcctl
 =====
 
+__**This tool is an ugly hack and it's deprecated. Use [mccmd](https://github.com/ausbin/mccmd) instead.**__
+
 mcctl is a bash script that greatly simplifies administering a minecraft server. It's like apachectl except for minecraft. 
 
 Licensed under the GPL2.
